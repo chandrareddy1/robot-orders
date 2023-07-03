@@ -1,13 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 5.0.1 (Python 3.9.13 on win32)" generated="20230703 11:59:54.162" rpa="false" schemaversion="3">
+<robot generator="Robot 5.0.1 (Python 3.9.13 on win32)" generated="20230703 14:55:51.926" rpa="false" schemaversion="3">
 <suite id="s1" name="Robot Interactive Console" source="c:\Users\csekhara\.vscode\extensions\robocorp.robotframework-lsp-1.11.0\src\robotframework_ls\vendored\robotframework_interactive\robot_interactive_console.robot">
 <test id="s1-t1" name="Default Task/Test" line="5">
 <kw name="Interpreter Main Loop" library="MainLoop">
-<status status="PASS" starttime="20230703 11:59:54.228" endtime="20230703 12:05:09.384"/>
+<kw name="Directory Cleanup">
+<msg timestamp="20230703 14:55:52.354" level="FAIL">No keyword with name 'Directory Cleanup' found.</msg>
+<status status="FAIL" starttime="20230703 14:55:52.354" endtime="20230703 14:55:52.354"/>
 </kw>
-<status status="PASS" starttime="20230703 11:59:54.228" endtime="20230703 12:05:09.384"/>
+<kw name="Open the robot order website">
+<status status="NOT RUN" starttime="20230703 14:55:52.356" endtime="20230703 14:55:52.356"/>
+</kw>
+<kw name="Get orders">
+<var>${orders}</var>
+<status status="NOT RUN" starttime="20230703 14:55:52.357" endtime="20230703 14:55:52.357"/>
+</kw>
+<for flavor="IN">
+<var>${row}</var>
+<value>@{orders}</value>
+<iter>
+<var name="${row}"/>
+<kw name="Close the annoying modal">
+<status status="NOT RUN" starttime="20230703 14:55:52.358" endtime="20230703 14:55:52.358"/>
+</kw>
+<kw name="Fill the form">
+<arg>${row}</arg>
+<status status="NOT RUN" starttime="20230703 14:55:52.359" endtime="20230703 14:55:52.359"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>10x</arg>
+<arg>2s</arg>
+<arg>Preview the robot</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="NOT RUN" starttime="20230703 14:55:52.359" endtime="20230703 14:55:52.359"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>10x</arg>
+<arg>2s</arg>
+<arg>Submit The Order</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="NOT RUN" starttime="20230703 14:55:52.359" endtime="20230703 14:55:52.359"/>
+</kw>
+<kw name="Take a screenshot of the robot">
+<var>${orderid}</var>
+<var>${img_filename}</var>
+<status status="NOT RUN" starttime="20230703 14:55:52.360" endtime="20230703 14:55:52.360"/>
+</kw>
+<kw name="Store the receipt as a PDF file">
+<var>${pdf_filename}</var>
+<arg>ORDER_NUMBER=${order_id}</arg>
+<status status="NOT RUN" starttime="20230703 14:55:52.361" endtime="20230703 14:55:52.361"/>
+</kw>
+<kw name="Embed the robot screenshot to the receipt PDF file">
+<arg>IMG_FILE=${img_filename}</arg>
+<arg>PDF_FILE=${pdf_filename}</arg>
+<status status="NOT RUN" starttime="20230703 14:55:52.362" endtime="20230703 14:55:52.362"/>
+</kw>
+<kw name="Go to order another robot">
+<status status="NOT RUN" starttime="20230703 14:55:52.363" endtime="20230703 14:55:52.363"/>
+</kw>
+<status status="NOT RUN" starttime="20230703 14:55:52.357" endtime="20230703 14:55:52.363"/>
+</iter>
+<status status="NOT RUN" starttime="20230703 14:55:52.357" endtime="20230703 14:55:52.363"/>
+</for>
+<kw name="Create a ZIP file of the receipts">
+<status status="NOT RUN" starttime="20230703 14:55:52.364" endtime="20230703 14:55:52.364"/>
+</kw>
+<kw name="Log Out And Close The Browser">
+<status status="NOT RUN" starttime="20230703 14:55:52.364" endtime="20230703 14:55:52.364"/>
+</kw>
+<status status="PASS" starttime="20230703 14:55:51.989" endtime="20230703 15:10:12.984"/>
+</kw>
+<status status="PASS" starttime="20230703 14:55:51.989" endtime="20230703 15:10:12.985"/>
 </test>
-<status status="PASS" starttime="20230703 11:59:54.164" endtime="20230703 12:05:09.385"/>
+<status status="PASS" starttime="20230703 14:55:51.926" endtime="20230703 15:10:12.986"/>
 </suite>
 <statistics>
 <total>

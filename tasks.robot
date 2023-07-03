@@ -4,7 +4,7 @@ Documentation       Orders robots from RobotSpareBin Industries Inc.
 ...                 Saves the screenshot of the ordered robot.
 ...                 Embeds the screenshot of the robot to the PDF receipt.
 ...                 Creates ZIP archive of the receipts and the images.
-...                 Author: www.github.com/joergschultzelutter
+...
 
 Library             RPA.Browser.Selenium
 Library             RPA.HTTP
@@ -13,16 +13,7 @@ Library             RPA.PDF
 Library             RPA.Archive
 Library             Collections
 Library             RPA.RobotLogListener
-Library             RPA.Robocloud.Secrets
 Library             OperatingSystem
-# I removed these as the previous setup would not look pretty when being used in combination with the rpa.dialogs work flow.
-# Suite Setup    Open the robot order website
-# Suite Teardown    Log Out And Close The Browser
-#
-# In order to run this program, you MUST change the devdata/env.json file. Its content only seems to accept an absolute
-# file name. This seems to be a RPA limitation.
-#    Addititionally, the venv setting in the .vscode/settings.json file needs to be changed.
-#
 
 
 *** Variables ***
@@ -66,8 +57,6 @@ Open the robot order website
 Directory Cleanup
     Log To console    Cleaning up content from previous test runs
 
-    # The archive command will not create this automatically so we need to ensure that the directory is there
-    # Create Directory will not give us an error if the directory already exists.
     Create Directory    ${output_folder}
     Create Directory    ${img_folder}
     Create Directory    ${pdf_folder}
@@ -96,11 +85,6 @@ Fill the form
     Set Local Variable    ${legs}    ${myrow}[Legs]
     Set Local Variable    ${address}    ${myrow}[Address]
 
-    # Define local variables for the UI elements
-    # "legs" UID changes all the time so this one uses an
-    # absolute xpath. I prefer local variables over
-    # "Assign ID To Element" as the latter does not seem
-    # to be able to use a full XPath reference
     Set Local Variable    ${input_head}    //*[@id="head"]
     Set Local Variable    ${input_body}    body
     Set Local Variable    ${input_legs}    xpath://html/body/div/div/div[1]/div/div[1]/form/div[3]/input
@@ -109,13 +93,6 @@ Fill the form
     Set Local Variable    ${btn_order}    //*[@id="order"]
     Set Local Variable    ${img_preview}    //*[@id="robot-preview-image"]
 
-    # Input the data. I use a "cautious" approach and assume
-    # that there are situations when a field is not yet visible
-    # It is however assumed that all of the input elements are visible
-    # when the first element has been rendered visible.
-    # An even more careful approach would result in checking if e.g.
-    # the given group is actually a radio button, dropdown list etc.
-    # However, this was deemed out of scope for this exercise
     Wait Until Element Is Visible    ${input_head}
     Wait Until Element Is Enabled    ${input_head}
     Select From List By Value    ${input_head}    ${head}
@@ -143,7 +120,7 @@ Submit the order
     # Do not generate screenshots if the test fails
     Mute Run On Failure    Page Should Contain Element
 
-    # Submit the order. If we have a receipt, then all is well
+    # Submit the order. If we have a receipt
     Click button    ${btn_order}
     Page Should Contain Element    ${lbl_receipt}
 
@@ -152,8 +129,6 @@ Take a screenshot of the robot
     Set Local Variable    ${lbl_orderid}    xpath://html/body/div/div/div[1]/div/div[1]/div/div/p[1]
     Set Local Variable    ${img_robot}    //*[@id="robot-preview-image"]
 
-    # This is supposed to help with network congestion (I hope)
-    # when loading an image takes too long and we will only end up with a partial download.
     Wait Until Element Is Visible    ${img_robot}
     Wait Until Element Is Visible    ${lbl_orderid}
 
@@ -163,12 +138,6 @@ Take a screenshot of the robot
     # Create the File Name
     Set Local Variable    ${fully_qualified_img_filename}    ${img_folder}${/}${orderid}.png
 
-    # The sleep command is a dirty workaround for the case where one part of the three-folded image has not yet been loaded
-    # This can happen at very throttled download speeds and results in an incomplete target image.
-    # A preference would be to have a keyword such as "Wait until image has been downloaded" over this quick hack
-    # but even Selenium does not support this natively.
-    #
-    # Sorry mates - I mainly use Robot Framework for REST APIs. Web testing is not my primary domain :-)
     #
     Sleep    1sec
     Log To Console    Capturing Screenshot to ${fully_qualified_img_filename}
@@ -208,21 +177,6 @@ Embed the robot screenshot to the receipt PDF file
     # Create the list of files that is to be added to the PDF (here, it is just one file)
     @{myfiles}=    Create List    ${IMG_FILE}:x=0,y=0
 
-    # Add the files to the PDF
-    #
-    # Note:
-    #
-    # 'append' requires the latest RPAframework. Update the version in the conda.yaml file - otherwise,
-    # this will not work. The VSCode auto-generated file contains a version number that is way too old.
-    #
-    # per https://github.com/robocorp/rpaframework/blob/master/packages/pdf/src/RPA/PDF/keywords/document.py,
-    # an "append" always adds a NEW page to the file. I don't see a way to EMBED the image in the first page
-    # which contains the order data
     Add Files To PDF    ${myfiles}    ${PDF_FILE}    ${True}
 
     Close PDF    ${PDF_FILE}
-
-Get The Program Author Name From Our Vault
-    Log To Console    Getting Secret from our Vault
-    ${secret}=    Get Secret    mysecrets
-    Log    ${secret}[whowrotethis] wrote this program for you    console=yes
